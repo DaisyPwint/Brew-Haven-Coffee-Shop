@@ -95,14 +95,15 @@ const cartSlice = createSlice({
     reducers: {
         addToCart: (state,{payload}) => addItemToCart(state,payload),
         removeFromCart: (state,{payload}) => {
-            console.log(payload);
+            // console.log(payload);
             const item = payload;
             const filteredItems = state.items.filter((cart) => cart.id !== item.id);
 
             return {
                 ...state,
                 items: filteredItems,
-                totalAmount: state.totalAmount - item.amount
+                totalAmount: state.totalAmount - item.amount,
+                totalPrice: state.totalPrice - item.price * item.amount
             }
         },
         increase: (state,{payload}) => updateCartItem(state,payload,'increase'),

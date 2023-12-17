@@ -19,7 +19,7 @@ This React project is a Coffee Shop Point of Sale (POS) system.
 
 ## Getting Started
 
--Clone the repository: `git clone https://github.com/DaisyPwint/Food-POS` <br>
+-Clone the repository: `git clone https://github.com/DaisyPwint/Brew-Haven-Coffee-Shop` <br>
 -Install dependencies: `npm install` <br>
 -Run the application: `npm run dev`
 
