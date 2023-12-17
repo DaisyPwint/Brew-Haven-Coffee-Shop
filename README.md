@@ -25,7 +25,7 @@ This React project is a Coffee Shop Point of Sale (POS) system.
 
 # Demo Link
 
-Live Demo: [https://phoo-coffee-shop-pos.netlify.app/] 
+Live Demo: [https://phoo-brew-haven.netlify.app/] 
 
 # Built with
 
