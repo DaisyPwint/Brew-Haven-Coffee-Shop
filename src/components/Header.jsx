@@ -28,7 +28,7 @@ const Header = () => {
 
   return (
     <>
-      <nav className="sticky top-0 left-0 bg-white z-10 flex items-center justify-between py-4 px-16 lg:px-10 border-b-2">
+      <nav className="sticky top-0 left-0 bg-white z-20 flex items-center justify-between py-4 px-16 lg:px-10 border-b-2">
         <div className='hidden lg:flex items-center gap-5 w-6/12'>
           <span className='bg-primary-200 flex justify-center items-center text-white rounded-full w-12 h-12 text-2xl'>B</span>
           <h1 className="text-[18px] cursor-pointer" onClick={() => navigate('/')}>Brew Haven

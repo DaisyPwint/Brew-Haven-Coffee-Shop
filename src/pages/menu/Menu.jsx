@@ -14,7 +14,7 @@ const Menu = () => {
     <section>
       <h1>Menu Category</h1>
 
-      <div className="flex flex-wrap my-4">
+      <div className="flex flex-wrap my-4 sticky lg:top-20 top-14 bg-white z-10">
             {
               filterType ? <button onClick={() => setSearchParams({})} className="flex items-center p-3 m-2 cursor-pointer border-2 border-primary-200 rounded-md drop-shadow-md outline-none hover:bg-primary-200 hover:text-white">All</button> : null
             }
@@ -30,7 +30,7 @@ const Menu = () => {
               ))
             }
       </div>
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">      
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">      
       {
         displayMenu.map((item) => (
           <Link to={`${item.id}`} state={{search : `?${searchParams.toString()}`,type: filterType}} key={item.id} className="border shadow-lg rounded-lg">
