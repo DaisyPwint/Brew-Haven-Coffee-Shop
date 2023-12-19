@@ -1,13 +1,12 @@
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
-import ButtonLink from "../../components/ButtonLink";
 
 const Featured = () => {
     const {menu} = useSelector(state => state.menu);
     const featuredMenu = menu.slice(0,3);
 
   return (
-    <section className="mt-8">
+    <div className="mt-8">
         <div className="flex justify-center items-center relative pb-3">
             <h1 className="text-gray-900 text-2xl">Featured Menu</h1>
             <div className="absolute w-28 h-1 bg-primary-200 bottom-1"/>
@@ -26,7 +25,7 @@ const Featured = () => {
                 ))
             }
         </div>
-    </section>
+    </div>
   )
 }
 
