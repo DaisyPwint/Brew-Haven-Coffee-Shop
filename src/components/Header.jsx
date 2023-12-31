@@ -3,6 +3,7 @@ import { NavLink, useNavigate } from 'react-router-dom';
 import { FaShoppingCart } from 'react-icons/fa';
 import { Dialog } from '@headlessui/react'
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline'
+import Avatar from '../assets/avatar.png';
 import { useSelector } from 'react-redux';
 
 const navigation = [
@@ -20,6 +21,7 @@ const navigation = [
 const Header = () => {
   const [mobileMenuOpen,setMobileMenuOpen] = useState(false);
   const {totalAmount} = useSelector(state => state.cart);
+  const {userInfo} = useSelector(state => state.auth);
   const navigate = useNavigate();
 
   const handleCartButtonClick = () => {
@@ -52,13 +54,17 @@ const Header = () => {
             <span className="sr-only">Cart</span>
             <div className="absolute inline-flex items-center justify-center w-6 h-6 text-xs font-bold text-white bg-gray-950 border-2 border-white rounded-full -top-4 -right-4 dark:border-gray-900">{totalAmount}</div>
           </button>
+          <div className='flex items-center gap-3'>
+            <p>{userInfo?.username}</p>
+            <img src={Avatar} alt="avatar image" className='w-8 h-8 rounded-full bg-slate-300 text-primary-300' />
+          </div>
         </div>
       </nav>
 
       {/* mobile view */}
       <Dialog as="div" className="lg:hidden" open={mobileMenuOpen} onClose={setMobileMenuOpen}>
           <div className="fixed inset-0 z-50" />
-          <Dialog.Panel className="fixed inset-y-0 right-0 z-50 w-full overflow-y-auto bg-white px-6 py-6 sm:max-w-sm sm:ring-1 sm:ring-gray-900/10">
+          <Dialog.Panel className="fixed inset-y-0 right-0 z-50 w-[300px] h-[300px] overflow-y-auto bg-white px-6 py-6 sm:max-w-sm sm:ring-1 sm:ring-gray-900/10 shadow-md">
             <div className="flex items-center justify-end">
               <button type="button" className="-m-2.5 rounded-md p-2.5 text-primary-300" onClick={() => setMobileMenuOpen(false)}>
                 <XMarkIcon className="h-6 w-6" aria-hidden="true" />

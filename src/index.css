@@ -18,4 +18,8 @@
     a.active{
         @apply bg-gray-900 text-white;
     }
+    .relative input:focus-within ~ label,
+    .relative input:not(:placeholder-shown) ~ label{
+    @apply transform scale-75 -translate-y-5 z-0 px-1 py-0 text-[1.3rem];
+    }
 }
