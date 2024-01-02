@@ -1,12 +1,57 @@
-import { useSelector } from "react-redux"
+import { useDispatch, useSelector } from "react-redux"
 import BillInfo from "../components/BillInfo";
-import { Link } from "react-router-dom";
-import { useState } from "react";
-import Confirm from "../components/Confirm";
+import { Link, useNavigate } from "react-router-dom";
+import { useRef} from "react";
+import { ToastContainer, toast } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
+import { addOrder } from "../app/slices/orderSlice";
+import { emptyItem } from "../app/slices/cartSlice";
 
 const Checkout = () => {
-  const {items,totalPrice} = useSelector(state => state.cart);
-  const {isConfirm,setIsConfirm} = useState(false);
+  const {items,totalAmount,totalPrice} = useSelector(state => state.cart);
+  const nameRef = useRef();
+  const addressRef = useRef();
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  
+  const total = totalPrice + 5.00;
+  const currentDate = new Date();
+  const optionForTime = {
+    hour: '2-digit',
+    minute: '2-digit',
+    hour12: true
+  }
+  const optionForyear = {
+    year: 'numeric',
+    month: 'short',
+    day: 'numeric'
+  }
+  const time = new Intl.DateTimeFormat('en-US',optionForTime).format(currentDate);
+  const year = new Intl.DateTimeFormat('en-US',optionForyear).format(currentDate);
+  const formattedDate = `${time} - ${year}`;
+
+  const handleConfirm = () => {
+    const name = nameRef.current.value;
+    const address = addressRef.current.value;
+    if(name === "" && address === ""){
+      toast('Please provide name and address')
+    }else if(name === ""){
+      toast('Please provide name')
+    }else if(address === ""){
+      toast('Please provide address')
+    }else{
+      const orderItem = {
+        name,
+        address,
+        totalItem : totalAmount,
+        orderTotal : total.toFixed(2),
+        date: formattedDate
+      }
+      dispatch(addOrder(orderItem))
+      dispatch(emptyItem());
+      navigate('/orders');
+    }
+  }
 
   return (
     <section>
@@ -25,7 +70,7 @@ const Checkout = () => {
                     <label htmlFor="first-name">
                       First Name
                     </label>
-                    <input type="text" name="first-name" id="first-name" autoComplete="given-name" className="block w-full mt-2 rounded-md border-0 py-3 px-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 700 focus:outline-none focus:ring-2 focus:ring-primary-200 focus:ring-inset sm:text-sm"/>
+                    <input type="text" name="first-name" id="first-name" ref={nameRef} autoComplete="given-name" className="block w-full mt-2 rounded-md border-0 py-3 px-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 700 focus:outline-none focus:ring-2 focus:ring-primary-200 focus:ring-inset sm:text-sm"/>
                   </div>
                   <div>
                     <label htmlFor="address">
@@ -34,14 +79,12 @@ const Checkout = () => {
                     <input id="address"
                     name="address"
                     type="text"
+                    ref={addressRef}
                     autoComplete="address" className="block w-full mt-2 rounded-md border-0 py-3 px-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 700 focus:outline-none focus:ring-2 focus:ring-primary-200 focus:ring-inset sm:text-sm"/>
                   </div>
-                  <button className="w-full bg-primary-200 text-white px-4 py-2 mt-4 rounded-md hover:bg-primary-dark" onClick={() => setIsConfirm(true)}>
+                  <button className="w-full bg-primary-200 text-white px-4 py-2 mt-4 rounded-md hover:bg-primary-dark" onClick={handleConfirm}>
                   Confirm Order
                   </button>
-                  {
-                    isConfirm && <Confirm/>
-                  }
                 </div>
               </div>
               <div className="w-1/2"><BillInfo totalPrice={totalPrice}/></div>
@@ -49,6 +92,7 @@ const Checkout = () => {
           ) : <Link to="/menu" className="text-slate-600 mt-10">Your cart is empty! Why not continue shopping and explore our delightful coffee and treats? ☕🍰</Link>
         }
       </div>
+      <ToastContainer position="top-center" />
     </section>
   )
 }

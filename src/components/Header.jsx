@@ -4,25 +4,31 @@ import { FaShoppingCart } from 'react-icons/fa';
 import { Dialog } from '@headlessui/react'
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline'
 import Avatar from '../assets/avatar.png';
-import { useSelector } from 'react-redux';
-
-const navigation = [
-  {
-    name: 'Home', href: '.',
-  },  
-  {
-    name: 'Menu', href: 'menu',
-  },
-  {
-    name: 'Cart', href: 'cart',
-  }
-]
+import { useDispatch, useSelector } from 'react-redux';
+import { logout } from '../app/slices/authSlice';
 
 const Header = () => {
   const [mobileMenuOpen,setMobileMenuOpen] = useState(false);
+  const [showPopover,setShowPopover] = useState(false);
   const {totalAmount} = useSelector(state => state.cart);
-  const {userInfo} = useSelector(state => state.auth);
+  const {userInfo,token} = useSelector(state => state.auth);
   const navigate = useNavigate();
+
+  const navigation = [
+    {
+      name: 'Home', href: '/',
+    },  
+    {
+      name: 'Menu', href: 'menu',
+    },
+    {
+      name: 'Cart', href: 'cart',
+    },
+    token && {
+      name: 'Checkout',href: 'checkout'
+    },
+    token && { name: 'Orders', href: 'orders' },
+  ].filter(Boolean); 
 
   const handleCartButtonClick = () => {
     navigate('/cart');
@@ -30,14 +36,14 @@ const Header = () => {
 
   return (
     <>
-      <nav className="sticky top-0 left-0 bg-white z-20 flex items-center justify-between py-4 px-16 lg:px-10 border-b-2">
+      <nav className="sticky top-0 left-0 bg-white z-20 flex items-center justify-between py-4 px-10 md:px-16 lg:px-10 border-b-2">
         <div className='hidden lg:flex items-center gap-5 w-6/12'>
           <span className='bg-primary-200 flex justify-center items-center text-white rounded-full w-12 h-12 text-2xl'>B</span>
           <h1 className="text-[18px] cursor-pointer" onClick={() => navigate('/')}>Brew Haven
           </h1>
         </div>
         <div className="flex lg:hidden">
-          <button type='button' className='-m-2.5 inline-flex items-center justify-center rounded-md p-.25 text-primary-300' onClick={() => setMobileMenuOpen(true)}>
+          <button type='button' className='inline-flex items-center justify-center rounded-md p-.25 text-primary-300' onClick={() => setMobileMenuOpen(true)}>
           <Bars3Icon className="h-6 w-6" aria-hidden="true" />
           </button>
         </div>
@@ -56,7 +62,16 @@ const Header = () => {
           </button>
           <div className='flex items-center gap-3'>
             <p>{userInfo?.username}</p>
-            <img src={Avatar} alt="avatar image" className='w-8 h-8 rounded-full bg-slate-300 text-primary-300' />
+            {
+              token ? 
+              (<div className='relative'>
+                <img src={Avatar} alt="avatar image" className='w-8 h-8 rounded-full bg-slate-300 text-primary-300 cursor-pointer' onClick={() => setShowPopover(!showPopover)} />
+                {
+                  showPopover && <PopoverContent/>
+                }
+              </div>)
+              : <img src={Avatar} alt="avatar image" className='w-8 h-8 rounded-full bg-slate-300 text-primary-300 cursor-pointer' onClick={() => navigate('/register')} />
+            }
           </div>
         </div>
       </nav>
@@ -85,6 +100,19 @@ const Header = () => {
       </Dialog>
     </>
   )
+}
+
+
+const PopoverContent = () => {  
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  return <div className='bg-white h-16 w-28 z-20 absolute right-0 top-9 rounded-md shadow-md flex justify-center items-center'>
+    <p className='text-red-600 cursor-pointer' onClick={() => {
+      dispatch(logout())
+      navigate('/login')
+    }}>logout</p>
+  </div>
 }
 
 export default Header

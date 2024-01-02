@@ -1,6 +1,7 @@
 import { BrowserRouter as Router, Routes,Route } from "react-router-dom";
 import Layout from "./layout/Layout";
 import { Home, Cart, Menu, MenuDetail, Register, Login, Checkout, Orders } from '@pages'
+import NotFound from "./pages/NotFound";
 
 function App() {  
   return (
@@ -16,6 +17,7 @@ function App() {
           <Route path="checkout" element={<Checkout/>}/>
           <Route path="orders" element={<Orders/>}/>
         </Route>
+        <Route path="*" element={<NotFound/>} />
       </Routes>
     </Router>
   )
